@@ -15,13 +15,14 @@
     minHandLenght: 75,
     hourHandWidth: 5,
     hourHandLenght: 45,
-    basePivotColor: '#fff',
-    topPivotColor: '#d63031',
-    screwColor: '#2d3436',
+    dialColors: ["#45aaf2", "#2ecc71", "#f1c40f", "#1abc9c", "#F97F51"],
+    basePivotColor: "#fff",
+    topPivotColor: "#d63031",
+    screwColor: "#2d3436",
   };
 
-  const canvas = document.getElementById('watch-face');
-  const context = canvas.getContext('2d');
+  const canvas = document.getElementById("watch-face");
+  const context = canvas.getContext("2d");
 
   let drawingSurfaceImageData;
   const saveDrawingSurface = (context) => {
@@ -37,19 +38,29 @@
     context.putImageData(drawingSurfaceImageData, 0, 0);
   };
 
+  const getRandomNumber = (max, min = 0) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+
+    return Math.floor(Math.random() * (max - min + 1) - min);
+  };
+
+  // map 60 ticks to 2 * PI
+  const base60ToRadians = (base60Number) => (2 * Math.PI * base60Number) / 60;
+
   const getCanvasCenter = () => ({
     x: 0,
     y: 0,
   });
 
-  const drawDial = (radius) => {
+  const drawDial = (radius, color = "#45aaf2") => {
     context.save();
 
     const { x, y } = getCanvasCenter();
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI);
 
-    context.strokeStyle = '#45aaf2';
+    context.strokeStyle = color;
     context.lineWidth = 2;
     context.stroke();
 
@@ -58,7 +69,7 @@
 
   const drawTick = () => {
     context.save();
-    context.strokeStyle = '#fff';
+    context.strokeStyle = "#fff";
 
     context.strokeRect(
       -WATCH_DIMENSIONS.tickWidth / 2,
@@ -93,7 +104,7 @@
     context.save();
 
     context.fillStyle = color;
-    context.shadowColor = '#000';
+    context.shadowColor = "#000";
     context.shadowBlur = 20;
     context.shadowOffsetX = -2;
     context.shadowOffsetY = -2;
@@ -109,7 +120,7 @@
 
     context.rotate(angle);
 
-    if (type === 'fill') {
+    if (type === "fill") {
       context.fillStyle = color;
       context.fillRect(-width / 2, -offset, width, length + offset);
     } else {
@@ -124,18 +135,18 @@
     drawHand({
       length: WATCH_DIMENSIONS.minHandLenght,
       width: WATCH_DIMENSIONS.minHandWidth,
-      color: '#dfe6e9',
+      color: "#dfe6e9",
       angle: minAngle,
       offset: 0,
-      type: 'fill',
+      type: "fill",
     });
     drawHand({
       length: WATCH_DIMENSIONS.hourHandLenght,
       width: WATCH_DIMENSIONS.hourHandWidth,
-      color: '#dfe6e9',
+      color: "#dfe6e9",
       angle: hourAngle,
       offset: 0,
-      type: 'fill',
+      type: "fill",
     });
 
     drawPivot(WATCH_DIMENSIONS.basePivotColor, 6);
@@ -143,10 +154,10 @@
     drawHand({
       length: WATCH_DIMENSIONS.secHandLenght,
       width: WATCH_DIMENSIONS.secHandWidth,
-      color: '#d63031',
+      color: "#d63031",
       angle: secAngle,
       offset: 20,
-      type: 'fill',
+      type: "fill",
     });
 
     drawPivot(WATCH_DIMENSIONS.topPivotColor, 4);
@@ -168,27 +179,56 @@
     drawHands(secAngle, minAngle, hourAngle);
   };
 
-  const drawWatchFace = () => {
-    // translate context to center of canvas
-    context.translate(canvas.width / 2, canvas.height / 2);
+  let clearIntervalId;
+  let isRunning = false;
 
-    drawDial(WATCH_DIMENSIONS.radius);
-    drawDial(WATCH_DIMENSIONS.radius - WATCH_DIMENSIONS.dialWidth);
+  const drawDials = () => {
+    const dialColorIndex = getRandomNumber(
+      WATCH_DIMENSIONS.dialColors.length - 1
+    );
+    const dialColor = WATCH_DIMENSIONS.dialColors[dialColorIndex];
+
+    drawDial(WATCH_DIMENSIONS.radius, dialColor);
+    drawDial(WATCH_DIMENSIONS.radius - WATCH_DIMENSIONS.dialWidth, dialColor);
+  };
+
+  const initialize = () => {
+    // For the first run, translate context to center of canvas
+    if (!isRunning) {
+      context.translate(canvas.width / 2, canvas.height / 2);
+    } else {
+      context.clearRect(
+        -CANVAS_DIMENSIONS.width / 2,
+        -CANVAS_DIMENSIONS.height / 2,
+        CANVAS_DIMENSIONS.width,
+        CANVAS_DIMENSIONS.height
+      );
+    }
+  };
+
+  const drawWatchFace = () => {
+    initialize();
+
+    drawDials();
 
     drawTicks();
 
-    // save the drawing surface that won't change
+    // save the drawing surface that doesn't change
     saveDrawingSurface(context);
 
-    const clearIntervalId = setInterval(() => tick(new Date()), 1000);
+    if (clearIntervalId) clearInterval(clearIntervalId);
 
-    // drawHands();
+    // first tick intentionally delayed by a second to give the flash effect
+    clearIntervalId = setInterval(() => tick(new Date()), 1000);
   };
 
-  // map 60 ticks to 2 * PI
-  const base60ToRadians = (base60Number) => (2 * Math.PI * base60Number) / 60;
-
   // BEGIN
+  const render = () => {
+    context.canvas.onmousedown = drawWatchFace;
 
-  drawWatchFace();
+    drawWatchFace();
+    isRunning = true;
+  };
+
+  render();
 })();
