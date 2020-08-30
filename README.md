@@ -1,2 +1,3 @@
 # html-canvas
-Collection of HTML5 canvas projects
+
+Collection of projects built while learning HTML5 canvas API
