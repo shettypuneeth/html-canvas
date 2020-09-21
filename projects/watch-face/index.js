@@ -8,13 +8,13 @@
     radius: 100,
     dialWidth: 10,
     tickWidth: 3,
-    tickLenght: 20,
+    tickLength: 20,
     secHandWidth: 3,
-    secHandLenght: 75,
+    secHandLength: 75,
     minHandWidth: 5,
-    minHandLenght: 75,
+    minHandLength: 75,
     hourHandWidth: 5,
-    hourHandLenght: 45,
+    hourHandLength: 45,
     dialColors: ["#45aaf2", "#2ecc71", "#f1c40f", "#1abc9c", "#F97F51"],
     basePivotColor: "#fff",
     topPivotColor: "#d63031",
@@ -76,11 +76,11 @@
       -(
         WATCH_DIMENSIONS.radius -
         WATCH_DIMENSIONS.dialWidth -
-        // WATCH_DIMENSIONS.tickLenght -
+        // WATCH_DIMENSIONS.tickLength -
         10
       ),
       WATCH_DIMENSIONS.tickWidth,
-      WATCH_DIMENSIONS.tickLenght
+      WATCH_DIMENSIONS.tickLength
     );
 
     context.restore();
@@ -133,7 +133,7 @@
 
   const drawHands = (secAngle, minAngle, hourAngle) => {
     drawHand({
-      length: WATCH_DIMENSIONS.minHandLenght,
+      length: WATCH_DIMENSIONS.minHandLength,
       width: WATCH_DIMENSIONS.minHandWidth,
       color: "#dfe6e9",
       angle: minAngle,
@@ -141,7 +141,7 @@
       type: "fill",
     });
     drawHand({
-      length: WATCH_DIMENSIONS.hourHandLenght,
+      length: WATCH_DIMENSIONS.hourHandLength,
       width: WATCH_DIMENSIONS.hourHandWidth,
       color: "#dfe6e9",
       angle: hourAngle,
@@ -152,7 +152,7 @@
     drawPivot(WATCH_DIMENSIONS.basePivotColor, 6);
 
     drawHand({
-      length: WATCH_DIMENSIONS.secHandLenght,
+      length: WATCH_DIMENSIONS.secHandLength,
       width: WATCH_DIMENSIONS.secHandWidth,
       color: "#d63031",
       angle: secAngle,
