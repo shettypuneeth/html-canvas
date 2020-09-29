@@ -1,8 +1,10 @@
 const gulp = require("gulp");
 const startDevServer = require("./webpack-dev-server");
 const inquirer = require("inquirer");
+const webpack = require("webpack");
+const getWebpackConfig = require("./webpack.config");
 
-gulp.task("start-dev-server", async (cb) => {
+const getProjectToRun = async () => {
   const { projectName } = await inquirer.prompt([
     {
       type: "checkbox",
@@ -25,8 +27,30 @@ gulp.task("start-dev-server", async (cb) => {
     },
   };
 
+  return options;
+};
+
+gulp.task("start-dev-server", async (done) => {
+  const options = await getProjectToRun();
+
   startDevServer(options);
-  cb();
+  done();
+});
+
+gulp.task("build", async (done) => {
+  process.env.NODE_ENV = "production";
+  const options = await getProjectToRun();
+  const config = getWebpackConfig(options);
+
+  const compiler = webpack(config);
+
+  compiler.run((err) => {
+    if (err) {
+      console.log("Error", err);
+    } else {
+      done();
+    }
+  });
 });
 
 gulp.task("default", gulp.series(["start-dev-server"]));

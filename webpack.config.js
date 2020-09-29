@@ -4,11 +4,12 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const getWebpackConfig = (options) => {
   const withWorkspacePrefix = (value) => `${options.name}/${value}`;
+  const isProd = process.env.NODE_ENV === "production";
 
   return {
-    mode: "development",
+    mode: isProd ? "production" : "development",
     context: path.resolve(__dirname, "projects"),
-    devtool: "inline-source-map",
+    devtool: isProd ? undefined : "inline-source-map",
     entry: {
       [options.entry.name]: withWorkspacePrefix(options.entry.path),
     },
@@ -20,6 +21,7 @@ const getWebpackConfig = (options) => {
       }),
     ],
     output: {
+      filename: isProd ? "[name].bundle.[hash].js" : "[name].bundle.js",
       path: path.resolve(__dirname, "dist"),
       publicPath: "/",
     },
