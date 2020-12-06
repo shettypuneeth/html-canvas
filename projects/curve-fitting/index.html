@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        background-color: #e8e8e8;
+        font-family: sans-serif;
+      }
+
+      body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+      }
+
+      .container {
+        display: flex;
+        align-items: flex-start;
+      }
+
+      #art-board {
+        border-radius: 3px;
+      }
+
+      .tool-set {
+        display: flex;
+        flex-direction: column;
+        border-radius: 3px;
+        padding: 6px;
+        background: #fff;
+        margin-right: 8px;
+      }
+
+      .tool {
+        padding: 8px;
+        padding-bottom: 6px;
+        margin-bottom: 8px;
+        border-radius: 3px;
+      }
+
+      .tool:last-child {
+        margin-bottom: 0;
+      }
+
+      .active {
+        background: #eaf1fd;
+      }
+
+      .icons-credit {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        font-size: 12px;
+      }
+
+      .header {
+        background: #fff;
+        padding: 16px;
+        width: 100%;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .container {
+          flex-direction: column-reverse;
+        }
+
+        .tool-set {
+          width: 100%;
+          margin-top: 8px;
+          flex-direction: row;
+        }
+
+        .tool {
+          margin-bottom: 0;
+        }
+
+        #art-board {
+          touch-action: none;
+        }
+
+        .icons-credit {
+          bottom: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">Curve Fitting</div>
+    <div class="center">
+      <div class="container">
+        <div class="tool-set">
+          <div data-curvetype="linear" class="tool active">
+            <?xml version="1.0" encoding="iso-8859-1"?>
+            <svg
+              width="24px"
+              height="24px"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 512.001 512.001"
+              xml:space="preserve"
+            >
+              <g>
+                <g>
+                  <path
+                    d="M506.143,5.859c-7.811-7.811-20.475-7.811-28.285,0l-472,472c-7.811,7.811-7.811,20.474,0,28.284
+        c3.905,3.906,9.024,5.858,14.142,5.858s10.237-1.953,14.143-5.858l472-472C513.954,26.333,513.954,13.67,506.143,5.859z"
+                  />
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div data-curvetype="polynomial" class="tool">
+            <svg
+              width="25px"
+              height="25px"
+              viewBox="0 0 65.875 65.875"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M62.052,0h-9v9h2.695c0.073,1.716,0.09,9.353-4.937,14.856c-3.647,3.994-9.188,6.019-16.465,6.019
+      c-24.391,0-27.188,23.486-27.469,27H3.823v9h9v-9H9.878c0.283-3.704,2.82-24,24.467-24c8.155,0,14.44-2.354,18.68-6.996
+      C58.714,19.65,58.841,11.347,58.751,9h3.301V0z M11.826,64.875h-7v-7h7V64.875z M61.052,8h-7V1h7V8z"
+                />
+              </g>
+            </svg>
+          </div>
+
+          <div data-curvetype="circle" class="tool">
+            <svg
+              width="25px"
+              height="25px"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 471.612 471.612"
+              style="enable-background: new 0 0 471.612 471.612"
+            >
+              <g>
+                <path
+                  d="M68.987,402.624c91.98,91.983,241.652,91.983,333.636,0c91.983-91.977,91.983-241.658,0-333.639s-241.655-91.98-333.636,0
+      S-22.993,310.642,68.987,402.624z M87.29,87.276c81.899-81.896,215.152-81.896,297.052,0c81.882,81.894,81.882,215.154,0,297.055
+      c-81.899,81.887-215.164,81.887-297.052,0C5.394,302.431,5.394,169.17,87.29,87.276z"
+                />
+              </g>
+            </svg>
+          </div>
+
+          <div id="reset-canvas" class="tool">
+            <svg
+              version="1.1"
+              width="22px"
+              height="22px"
+              viewBox="0 0 480.35 480.35"
+              style="enable-background: new 0 0 480.35 480.35"
+              xml:space="preserve"
+            >
+              <g>
+                <g>
+                  <path
+                    d="M171.821,10.011C117.777,26.075,71.114,60.653,40.015,107.682c-4.271,7.706-6.938,16.196-7.84,24.96v-84.32h-32v128h128
+        v-32h-72.32c35.828-68.925,106.646-112.572,184.32-113.6c92.115,1.071,172.856,61.854,199.36,150.08l30.72-9.12
+        C432.489,44.627,298.876-27.755,171.821,10.011z"
+                  />
+                </g>
+              </g>
+              <g>
+                <g>
+                  <path
+                    d="M352.175,304.322v32h72.32c-35.828,68.925-106.646,112.572-184.32,113.6c-92.115-1.071-172.856-61.854-199.36-150.08
+        l-30.72,9.12c37.928,127.006,171.634,199.218,298.64,161.29c55.628-16.612,103.349-52.826,134.32-101.93
+        c3.318-6.262,5.075-13.233,5.12-20.32v84.32h32v-128H352.175z"
+                  />
+                </g>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <canvas id="art-board">Canvas not supported</canvas>
+      </div>
+    </div>
+
+    <div class="icons-credit">
+      Icons made by
+      <a href="https://www.flaticon.com/authors/freepik" title="Freepik"
+        >Freepik</a
+      >
+      from
+      <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+  </body>
+</html>

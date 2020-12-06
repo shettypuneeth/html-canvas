@@ -11,9 +11,8 @@ const getProjectToRun = async () => {
       message: "Select the project to run",
       name: "projectName",
       choices: [
-        {
-          name: "watch-face",
-        },
+        { name: "watch-face", value: "watch-face" },
+        { name: "curve-fitting", value: "curve-fitting" },
       ],
     },
   ]);

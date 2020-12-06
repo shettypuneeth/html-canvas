@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "version": "1.0.0",
+  "name": "curve-fitting",
+  "devDependencies": {},
+  "dependencies": {
+    "regression": "2.0.1"
+  }
+}
