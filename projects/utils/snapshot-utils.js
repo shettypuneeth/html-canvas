@@ -19,3 +19,7 @@ export const popDrawingSurfaceCache = () => DRAWING_SURFACE_CACHE.pop();
 export const resetDrawingSurfaceCache = () => {
   DRAWING_SURFACE_CACHE = [];
 };
+
+export const clearDrawingSurface = ({ context, x = 0, y = 0 }) => {
+  context.clearRect(x, y, context.canvas.width, context.canvas.height);
+};

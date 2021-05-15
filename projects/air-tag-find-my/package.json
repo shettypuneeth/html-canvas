@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "version": "1.0.0",
+  "name": "air-tag-find-my",
+  "devDependencies": {},
+  "dependencies": {
+    "d3-ease": "^2.0.0",
+    "d3-scale": "^3.2.3",
+    "d3-timer": "^2.0.0"
+  }
+}
