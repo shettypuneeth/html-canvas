@@ -12,10 +12,10 @@ const canvas = getCanvas('pixel-charge');
 const context = getContext(canvas);
 
 const DOT_COUNT = 16;
-const DOT_RADIUS = 4.5;
+const DOT_RADIUS = 5;
 
 const CIRCLE_RADIUS_START = 35;
-const CIRCLE_RADIUS_END = 85;
+const CIRCLE_RADIUS_END = 92;
 
 const TOTAL_DURATION = 3800;
 const SCALE_OUT_DURATION = 3000;
