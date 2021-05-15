@@ -2,6 +2,7 @@ import {
   getCanvas,
   getContext,
   drawCircle,
+  getDomNodes,
   clearDrawingSurface,
 } from '@ps/utils';
 import { timer } from 'd3-timer/src/timer';
@@ -14,13 +15,20 @@ const context = getContext(canvas);
 const DOT_COUNT = 16;
 const DOT_RADIUS = 5;
 
-const CIRCLE_RADIUS_START = 35;
-const CIRCLE_RADIUS_END = 92;
-
-const TOTAL_DURATION = 3800;
-const SCALE_OUT_DURATION = 3000;
-
+const CIRCLE_RADIUS_START = 40;
+const CIRCLE_RADIUS_END = 95;
 const ROTATE_TILL = (Math.PI / 24).toPrecision(2);
+
+// ANIMATION DURATION
+const TOTAL_DURATION = 4600;
+const SCALE_OUT_END = 3500;
+const ROTATION_START = 1500;
+const ROTATION_END = 3600;
+const OPACITY_START = 3700;
+const OPACITY_END = 4300;
+
+const chargePercentIndicatorDomNode = getDomNodes('#charge-percent')[0];
+let chargeLevel = 1;
 
 let TIMER = null;
 
@@ -38,15 +46,15 @@ const drawRing = (radius, fill = '#fff') => {
 
 const scaleRadius = scaleLinear()
   .domain([0, 1])
-  .rangeRound([CIRCLE_RADIUS_START, CIRCLE_RADIUS_END])
+  .range([CIRCLE_RADIUS_START, CIRCLE_RADIUS_END])
   .clamp(true);
 
 const scaleRotation = scaleLinear()
-  .domain([0, 0.4, 1])
+  .domain([0, ROTATION_START, ROTATION_END])
   .range([0, 0, ROTATE_TILL]);
 
 const scaleOpacity = scaleLinear()
-  .domain([SCALE_OUT_DURATION, TOTAL_DURATION])
+  .domain([OPACITY_START, OPACITY_END])
   .range([1, 0])
   .clamp(true);
 
@@ -57,19 +65,17 @@ const tick = (elapsed) => {
     y: -canvas.height / 2,
   });
 
-  const normalizedScaleOutElapsedTime =
-    (elapsed % TOTAL_DURATION) / SCALE_OUT_DURATION;
-  const normalizedRotateElapsedTime =
-    (elapsed % TOTAL_DURATION) / TOTAL_DURATION;
+  const scaleOutDurationNormalized = (elapsed % TOTAL_DURATION) / SCALE_OUT_END;
 
-  const radius = scaleRadius(cubicOut(normalizedRotateElapsedTime));
-  const rotation = scaleRotation(normalizedRotateElapsedTime);
+  const radius = scaleRadius(cubicOut(scaleOutDurationNormalized));
+  const rotation = scaleRotation(elapsed);
+
   context.save();
   context.rotate(rotation);
   drawRing(radius);
   context.restore();
 
-  if (elapsed > SCALE_OUT_DURATION) {
+  if (elapsed > OPACITY_START) {
     context.globalAlpha = scaleOpacity(elapsed).toPrecision(2);
   }
 
@@ -79,4 +85,13 @@ const tick = (elapsed) => {
   }
 };
 
+const startCharging = () => {
+  if (chargeLevel === 100) return;
+
+  chargePercentIndicatorDomNode.innerText = ++chargeLevel;
+};
+
 TIMER = timer(tick);
+
+// start charging
+setInterval(startCharging, 10000);
