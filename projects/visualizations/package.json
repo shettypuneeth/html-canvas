@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "version": "1.0.0",
+  "name": "visualizations",
+  "devDependencies": {},
+  "dependencies": {
+    "d3-scale": "^3.2.3"
+  }
+}

@@ -11,6 +11,7 @@ const getProjectToRun = async () => {
       message: 'Select the project to run',
       name: 'projectName',
       choices: [
+        { name: 'visualizations', value: 'visualizations' },
         { name: 'air-tag-find-my', value: 'air-tag-find-my' },
         { name: 'pixel-charging', value: 'pixel-charging' },
         { name: 'watch-face', value: 'watch-face' },
