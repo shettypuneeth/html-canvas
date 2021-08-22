@@ -16,6 +16,7 @@ const getProjectToRun = async () => {
         { name: 'pixel-charging', value: 'pixel-charging' },
         { name: 'watch-face', value: 'watch-face' },
         { name: 'curve-fitting', value: 'curve-fitting' },
+        { name: 'zoom-ui', value: 'zoom-ui' },
       ],
     },
   ]);
