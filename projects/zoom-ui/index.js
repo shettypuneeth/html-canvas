@@ -1,5 +1,11 @@
 import { getCanvas, getContext } from '@ps/utils';
-import { zoomCamera, getViewport, zoomIn } from '@ps/utils';
+import {
+  zoomCamera,
+  getViewport,
+  panCamera,
+  windowToCanvas,
+  drawCircle,
+} from '@ps/utils';
 
 const canvas = getCanvas('zoom-ui');
 const context = getContext(canvas);
@@ -27,9 +33,10 @@ function handleWheel(event) {
   event.preventDefault();
 
   const { clientX, clientY, deltaX, deltaY, ctrlKey } = event;
+  const point = windowToCanvas(canvas, clientX, clientY);
 
   if (ctrlKey) {
-    setCamera(zoomCamera(camera, { x: clientX, y: clientY }, deltaY / 100));
+    setCamera(zoomCamera(camera, point, deltaY / 100));
   } else {
     setCamera(panCamera(camera, deltaX, deltaY));
   }
@@ -43,7 +50,27 @@ const render = () => {
   context.scale(camera.z, camera.z);
   context.translate(camera.x, camera.y);
 
-  context.fillRect(canvas.width / 2 - 50, canvas.height / 2 - 50, 100, 100);
+  drawCircle({
+    context,
+    x: 0,
+    y: canvas.height / 2,
+    r: 80,
+    fC: '#f1c40f',
+  });
+  drawCircle({
+    context,
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    r: 80,
+    fC: '#2980b9',
+  });
+  drawCircle({
+    context,
+    x: canvas.width,
+    y: canvas.height / 2,
+    r: 80,
+    fC: '#d35400',
+  });
 };
 
 render();
